@@ -1,6 +1,6 @@
 (ns turbovote.pedestal-toolbox.body-params
   (:require [io.pedestal.service.http.body-params :as body-params]
-            [io.pedestal.service.interceptor :refer [defbefore]]
+            [io.pedestal.service.interceptor :refer [defbefore interceptor]]
             [turbovote.pedestal-toolbox.response :as response]))
 
 (defbefore body-params
@@ -9,3 +9,18 @@
     ((:enter (body-params/body-params)) ctx)
     (catch Exception e
       (assoc ctx :response (response/bad-request (.getMessage e))))))
+
+(defn coerce-body-params
+  ([] (coerce-body-params {}))
+  ([coercions]
+     (interceptor
+      :enter
+      (fn [ctx]
+        (loop [param-keys [:edn-params :json-params]]
+          (if (empty? param-keys)
+            ctx
+            (let [param-key (first param-keys)]
+              (if-let [params (get-in ctx [:request param-key])]
+                (assoc-in ctx [:request :body-params]
+                          ((get coercions param-key identity) params))
+                (recur (rest param-keys))))))))))

@@ -25,3 +25,33 @@
                      make-request
                      ((:enter body-params))
                      (get-in [:response :status])))))))
+
+(deftest coerce-body-params-test
+  (let [params {:a 1}
+        edn-ctx {:request {:edn-params params}}
+        json-ctx {:request {:json-params params}}
+        no-params-ctx {:request {}}]
+    (testing "with no coercions"
+      (let [enter (:enter (coerce-body-params))]
+        (is (= params (-> edn-ctx
+                          enter
+                          :request
+                          :body-params)))
+        (is (= params (-> json-ctx
+                          enter
+                          :request
+                          :body-params)))
+        (is (= no-params-ctx (enter no-params-ctx)))))
+    (testing "with coercions"
+      (let [enter (:enter (coerce-body-params
+                           {:edn-params (fn [m] (update-in m [:a] inc))
+                            :json-params (fn [m] (update-in m [:a] dec))}))]
+        (is (= {:a 2} (-> edn-ctx
+                          enter
+                          :request
+                          :body-params)))
+        (is (= {:a 0} (-> json-ctx
+                          enter
+                          :request
+                          :body-params)))
+        (is (= no-params-ctx (enter no-params-ctx)))))))
