@@ -1,7 +1,8 @@
 (ns turbovote.pedestal-toolbox.body-params-test
   (:require [clojure.test :refer :all]
             [io.pedestal.service.http.body-params :as body-params]
-            [turbovote.pedestal-toolbox.body-params :refer :all]))
+            [turbovote.pedestal-toolbox.body-params :refer :all]
+            [turbovote.pedestal-toolbox.response :refer [bad-request]]))
 
 (deftest body-params-test
   (let [make-request (fn [body]
@@ -54,4 +55,10 @@
                           enter
                           :request
                           :body-params)))
-        (is (= no-params-ctx (enter no-params-ctx)))))))
+        (is (= no-params-ctx (enter no-params-ctx)))))
+    (testing "with exceptional coercion"
+      (let [enter (:enter (coerce-body-params
+                           {:edn-params (fn [m] (throw (ex-info "badness" {})))}))]
+        (is (= (bad-request "badness") (-> edn-ctx
+                                           enter
+                                           :response)))))))
