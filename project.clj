@@ -1,4 +1,4 @@
-(defproject turbovote.pedestal-toolbox "0.1.3-SNAPSHOT"
+(defproject turbovote.pedestal-toolbox "0.1.3"
   :description "Pedestal service helpers"
   :url "http://www.github.com/turbovote/pedestal-toolbox"
   :license {:name "Eclipse Public License"
