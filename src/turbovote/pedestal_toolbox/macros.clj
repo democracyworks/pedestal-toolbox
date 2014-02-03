@@ -6,7 +6,7 @@
    binding => binding-form test response
 
    Like if-let, but permits multiple bindings and associates the
-   response onto the pedestal context if a test fails"
+   response onto the pedestal context if its corresponding test fails."
   [ctx bindings & exprs]
   (cond
    (empty? bindings) `(do ~@exprs)
