@@ -1,4 +1,4 @@
-(defproject turbovote.pedestal-toolbox "0.1.3"
+(defproject turbovote.pedestal-toolbox "0.1.4-SNAPSHOT"
   :description "Pedestal service helpers"
   :url "http://www.github.com/turbovote/pedestal-toolbox"
   :license {:name "Eclipse Public License"
@@ -6,4 +6,5 @@
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [io.pedestal/pedestal.service "0.2.2"]
                  [liberator "0.10.0"]
-                 [ring/ring-core "1.2.1"]])
+                 [ring/ring-core "1.2.1"]
+                 [cheshire "5.3.1"]])
