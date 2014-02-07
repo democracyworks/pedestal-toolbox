@@ -34,11 +34,13 @@
   "Given a schema, attempt to validate the body-params against
   it. Renders a 400 if the body-params does not match"
   [schema]
-  (interceptor
-   :enter
-   (fn [ctx]
-     (try
-       (s/validate schema (get-in ctx [:request :body-params]))
-       ctx
-       (catch clojure.lang.ExceptionInfo e
-         (assoc ctx :response (response/bad-request (.getMessage e))))))))
+  (with-meta
+    (interceptor
+     :enter
+     (fn [ctx]
+       (try
+         (s/validate schema (get-in ctx [:request :body-params]))
+         ctx
+         (catch clojure.lang.ExceptionInfo e
+           (assoc ctx :response (response/bad-request (.getMessage e)))))))
+    {:schema schema}))
