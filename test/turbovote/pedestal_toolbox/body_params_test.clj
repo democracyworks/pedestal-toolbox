@@ -62,3 +62,18 @@
         (is (= (bad-request "badness") (-> edn-ctx
                                            enter
                                            :response)))))))
+
+(deftest validate-body-params-test
+  (let [params {:a 1 :b "abc"}
+        ctx {:request {:body-params params}}
+        matching-schema {:a Long :b String}
+        mismatched-schema {:a String :c String}]
+    (testing "with a body that matches the schema"
+      (let [enter (:enter (validate-body-params matching-schema))]
+        (is (= ctx (enter ctx)))))
+    (testing "with a body that does not match the schema"
+      (let [enter (:enter (validate-body-params mismatched-schema))]
+        (is (= 400 (-> ctx
+                       enter
+                       :response
+                       :status)))))))
