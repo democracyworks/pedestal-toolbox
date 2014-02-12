@@ -1,7 +1,7 @@
-(ns turbovote.pedestal-toolbox.body-params-test
+(ns turbovote.pedestal-toolbox.params-test
   (:require [clojure.test :refer :all]
             [io.pedestal.service.http.body-params :as body-params]
-            [turbovote.pedestal-toolbox.body-params :refer :all]
+            [turbovote.pedestal-toolbox.params :refer :all]
             [turbovote.pedestal-toolbox.response :refer [bad-request]]))
 
 (deftest body-params-test

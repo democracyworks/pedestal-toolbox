@@ -1,4 +1,4 @@
-(ns turbovote.pedestal-toolbox.body-params
+(ns turbovote.pedestal-toolbox.params
   (:require [io.pedestal.service.http.body-params :as body-params]
             [io.pedestal.service.interceptor :refer [defbefore interceptor]]
             [turbovote.pedestal-toolbox.response :as response]
@@ -30,17 +30,25 @@
                        (assoc ctx :response (response/bad-request (.getMessage e)))))
                 (recur (rest param-keys))))))))))
 
-(defn validate-body-params
-  "Given a schema, attempt to validate the body-params against
-  it. Renders a 400 if the body-params does not match"
-  [schema]
+(defn validate-params
+  [param-key schema]
   (with-meta
     (interceptor
      :enter
      (fn [ctx]
        (try
-         (s/validate schema (get-in ctx [:request :body-params]))
+         (s/validate schema (get-in ctx [:request param-key]))
          ctx
          (catch clojure.lang.ExceptionInfo e
            (assoc ctx :response (response/bad-request (.getMessage e)))))))
     {:schema schema}))
+
+(def validate-body-params
+  "Given a schema, attempt to validate the body-params against
+  it. Renders a 400 if the body-params does not match"
+  (partial validate-params :body-params))
+
+(def validate-query-params
+  "Given a schema, attempt to validate the query-params against
+  it. Renders a 400 if the query-params does not match"
+  (partial validate-params :query-params))
