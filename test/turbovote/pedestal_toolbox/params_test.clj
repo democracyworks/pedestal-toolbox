@@ -27,42 +27,6 @@
                      ((:enter body-params))
                      (get-in [:response :status])))))))
 
-(deftest coerce-body-params-test
-  (let [params {:a 1}
-        edn-ctx {:request {:edn-params params}}
-        json-ctx {:request {:json-params params}}
-        no-params-ctx {:request {}}]
-    (testing "with no coercions"
-      (let [enter (:enter (coerce-body-params))]
-        (is (= params (-> edn-ctx
-                          enter
-                          :request
-                          :body-params)))
-        (is (= params (-> json-ctx
-                          enter
-                          :request
-                          :body-params)))
-        (is (= no-params-ctx (enter no-params-ctx)))))
-    (testing "with coercions"
-      (let [enter (:enter (coerce-body-params
-                           {:edn-params (fn [m] (update-in m [:a] inc))
-                            :json-params (fn [m] (update-in m [:a] dec))}))]
-        (is (= {:a 2} (-> edn-ctx
-                          enter
-                          :request
-                          :body-params)))
-        (is (= {:a 0} (-> json-ctx
-                          enter
-                          :request
-                          :body-params)))
-        (is (= no-params-ctx (enter no-params-ctx)))))
-    (testing "with exceptional coercion"
-      (let [enter (:enter (coerce-body-params
-                           {:edn-params (fn [m] (throw (ex-info "badness" {})))}))]
-        (is (= (bad-request "badness") (-> edn-ctx
-                                           enter
-                                           :response)))))))
-
 (deftest validate-body-params-test
   (let [params {:a 1 :b "abc"}
         ctx {:request {:body-params params}}
@@ -76,4 +40,24 @@
         (is (= 400 (-> ctx
                        enter
                        :response
-                       :status)))))))
+                       :status))))))
+  (let [schema {:date java.util.Date
+                :uuid java.util.UUID}
+        enter (:enter (validate-body-params schema))]
+    (testing "without needing coercion"
+      (let [ctx {:request {:body-params {:date (java.util.Date.)
+                                         :uuid (java.util.UUID/randomUUID)}}}]
+        (is (= ctx (enter ctx)))))
+    (testing "with successful coercion"
+      (let [date #inst "1977-08-27"
+            uuid (java.util.UUID/randomUUID)
+            ctx {:request {:body-params {:date "1977-08-27"
+                                         :uuid (str uuid)}}}]
+        (is (= {:request {:body-params {:date date :uuid uuid}}}
+               (enter ctx)))))
+    (testing "with unsuccessful coercion"
+      (is (= 400
+             (-> {:request {:body-params {:date "4 score and 20 years ago"
+                                          :uuid "this is not a UUID!"}}}
+                 enter
+                 (get-in [:response :status])))))))
