@@ -21,7 +21,12 @@
 (defbefore body-params
   [ctx]
   (try
-    ((:enter (body-params/body-params)) ctx)
+    (let [new-ctx ((:enter (body-params/body-params)) ctx)
+          request (:request new-ctx)]
+      (assoc-in new-ctx [:request :body-params]
+                (or (:edn-params request)
+                    (:json-params request)
+                    (:form-params request))))
     (catch Exception e
       (assoc ctx :response (response/bad-request (.getMessage e))))))
 
@@ -37,7 +42,7 @@
            (if-let [error (schema.utils/error-val params)]
              (assoc ctx :response (response/bad-request
                                    (str "Value does not match schema: "
-                                        error)))
+                                        (pr-str error))))
              (assoc-in ctx [:request param-key] params)))
          (catch clojure.lang.ExceptionInfo e
            (assoc ctx :response (response/bad-request (.getMessage e)))))))

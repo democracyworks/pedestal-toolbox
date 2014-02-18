@@ -25,7 +25,13 @@
       (is (= 400 (-> bad-body
                      make-request
                      ((:enter body-params))
-                     (get-in [:response :status])))))))
+                     (get-in [:response :status])))))
+    (testing "Copies params to body-params"
+      (is (= (read-string good-body)
+             (-> good-body
+                 make-request
+                 ((:enter body-params))
+                 (get-in [:request :body-params])))))))
 
 (deftest validate-body-params-test
   (let [params {:a 1 :b "abc"}
