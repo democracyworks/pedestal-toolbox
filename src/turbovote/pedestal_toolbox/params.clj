@@ -1,6 +1,7 @@
 (ns turbovote.pedestal-toolbox.params
   (:require [io.pedestal.service.http.body-params :as body-params]
             [io.pedestal.service.interceptor :refer [defbefore interceptor]]
+            [ring.middleware.keyword-params :as keyword-params]
             [turbovote.pedestal-toolbox.response :as response]
             [schema.core :as s]
             [schema.coerce :as coerce]
@@ -29,6 +30,13 @@
                     (:form-params request))))
     (catch Exception e
       (assoc ctx :response (response/bad-request (.getMessage e))))))
+
+(defn keywordize-params
+  [param-key]
+  (interceptor
+   :enter
+   (fn [ctx]
+     (update-in ctx [:request param-key] #'keyword-params/keyify-params))))
 
 (defn validate-params
   [param-key schema]

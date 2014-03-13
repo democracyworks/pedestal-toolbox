@@ -33,6 +33,16 @@
                  ((:enter body-params))
                  (get-in [:request :body-params])))))))
 
+(deftest keywordize-params-test
+  (let [params {"a" 1 "b" {"c" 2}}
+        ctx {:request {:my-params params}}
+        enter (:enter (keywordize-params :my-params))]
+    (testing "keywordizes keys"
+      (is (= {:request {:my-params {:a 1 :b {:c 2}}}}
+             (enter ctx)))
+      (is (= {:request {:my-params nil}}
+             (enter {:request {}}))))))
+
 (deftest validate-body-params-test
   (let [params {:a 1 :b "abc"}
         ctx {:request {:body-params params}}
