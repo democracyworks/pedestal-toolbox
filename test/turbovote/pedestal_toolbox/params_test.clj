@@ -26,6 +26,11 @@
                      make-request
                      ((:enter body-params))
                      (get-in [:response :status])))))
+    (testing "Returns errors map on a bad request"
+      (is (:errors (-> bad-body
+                       make-request
+                       ((:enter body-params))
+                       (get-in [:response :body])))))
     (testing "Copies params to body-params"
       (is (= (read-string good-body)
              (-> good-body
@@ -76,4 +81,8 @@
              (-> {:request {:body-params {:date "4 score and 20 years ago"
                                           :uuid "this is not a UUID!"}}}
                  enter
-                 (get-in [:response :status])))))))
+                 (get-in [:response :status])))))
+    (testing "returns a map on error"
+      (is (:errors (-> {:request {:body-params {:date "4 score and 20 years ago"}}}
+                       enter
+                       (get-in [:response :body])))))))
