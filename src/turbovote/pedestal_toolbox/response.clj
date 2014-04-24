@@ -1,8 +1,8 @@
 (ns turbovote.pedestal-toolbox.response
   (:require [ring.util.response :as ring-resp]))
 
-(defn bad-request [error-msg]
-  (-> error-msg
+(defn bad-request [error]
+  (-> error
       ring-resp/response
       (ring-resp/status 400)))
 

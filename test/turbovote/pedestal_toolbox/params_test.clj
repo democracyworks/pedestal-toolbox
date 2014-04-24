@@ -26,6 +26,12 @@
                      make-request
                      ((:enter body-params))
                      (get-in [:response :status])))))
+    (testing "Returns error message on a bad request"
+      (is (= "Map literal must contain an even number of forms"
+             (-> bad-body
+                 make-request
+                 ((:enter body-params))
+                 (get-in [:response :body])))))
     (testing "Copies params to body-params"
       (is (= (read-string good-body)
              (-> good-body
@@ -76,4 +82,11 @@
              (-> {:request {:body-params {:date "4 score and 20 years ago"
                                           :uuid "this is not a UUID!"}}}
                  enter
-                 (get-in [:response :status])))))))
+                 (get-in [:response :status])))))
+    (testing "returns error map on validation errors"
+      (is (= #{:uuid :date}
+             (set (keys (-> {:request
+                             {:body-params
+                              {:date "4 score and 20 years ago"}}}
+                            enter
+                            (get-in [:response :body])))))))))

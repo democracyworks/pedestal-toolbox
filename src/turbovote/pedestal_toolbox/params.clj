@@ -48,11 +48,10 @@
          (let [validator (coerce/coercer schema coercion-matcher)
                params (validator (get-in ctx [:request param-key]))]
            (if-let [error (schema.utils/error-val params)]
-             (assoc ctx :response (response/bad-request
-                                   {:errors [error]}))
+             (assoc ctx :response (response/bad-request error))
              (assoc-in ctx [:request param-key] params)))
          (catch clojure.lang.ExceptionInfo e
-           (assoc ctx :response (response/bad-request {:errors [e]}))))))
+           (assoc ctx :response (response/bad-request e))))))
     {:schema schema}))
 
 (def validate-body-params
