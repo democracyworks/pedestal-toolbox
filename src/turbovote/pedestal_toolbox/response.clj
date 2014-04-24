@@ -2,11 +2,11 @@
   (:require [ring.util.response :as ring-resp]))
 
 (defn bad-request [error]
-  (-> {:errors error}
+  (-> error
       ring-resp/response
       (ring-resp/status 400)))
 
 (def not-acceptable
-  (-> {:errors "Not acceptable"}
+  (-> "Not acceptable"
       ring-resp/response
       (ring-resp/status 406)))
