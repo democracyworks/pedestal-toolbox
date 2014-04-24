@@ -4,7 +4,18 @@
             [turbovote.pedestal-toolbox.response :as response]
             [ring.util.response :as ring-resp]
             [cheshire.core :as json]
-            [clojure.string :as s]))
+            [cheshire.generate :refer [add-encoder encode-map]]
+            [clojure.string :as s]
+            [schema.utils :as schema]))
+
+(add-encoder schema.utils.ValidationError
+             (fn [error json-generator]
+               (let [error-explanation (schema/validation-error-explain error)]
+                 (encode-map
+                  {:message (str (first error-explanation) " "
+                                 (ffirst (rest error-explanation)))
+                   :value   (second (second error-explanation))}
+                  json-generator))))
 
 (def default-media-type-fns
   {"application/edn" pr-str

@@ -49,11 +49,10 @@
                params (validator (get-in ctx [:request param-key]))]
            (if-let [error (schema.utils/error-val params)]
              (assoc ctx :response (response/bad-request
-                                   (str "Value does not match schema: "
-                                        (pr-str error))))
+                                   {:errors [error]}))
              (assoc-in ctx [:request param-key] params)))
          (catch clojure.lang.ExceptionInfo e
-           (assoc ctx :response (response/bad-request (.getMessage e)))))))
+           (assoc ctx :response (response/bad-request {:errors [e]}))))))
     {:schema schema}))
 
 (def validate-body-params
