@@ -84,6 +84,9 @@
                  enter
                  (get-in [:response :status])))))
     (testing "returns error map on validation errors"
-      (is #{:uuid :date} (keys (-> {:request {:body-params {:date "4 score and 20 years ago"}}}
-                                   enter
-                                   (get-in [:response :body])))))))
+      (is (= #{:uuid :date}
+             (set (keys (-> {:request
+                             {:body-params
+                              {:date "4 score and 20 years ago"}}}
+                            enter
+                            (get-in [:response :body])))))))))
