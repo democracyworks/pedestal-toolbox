@@ -1,6 +1,6 @@
 (ns turbovote.pedestal-toolbox.params
-  (:require [io.pedestal.service.http.body-params :as body-params]
-            [io.pedestal.service.interceptor :refer [defbefore interceptor]]
+  (:require [io.pedestal.http.body-params :as body-params]
+            [io.pedestal.interceptor :refer [defbefore interceptor]]
             [ring.middleware.keyword-params :as keyword-params]
             [turbovote.pedestal-toolbox.response :as response]
             [schema.core :as s]
