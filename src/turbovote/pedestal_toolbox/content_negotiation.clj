@@ -17,6 +17,15 @@
                    :value   (second (second error-explanation))}
                   json-generator))))
 
+(defn negotiate-response-content-type
+  [ctx acceptable-media-types]
+  (let [accept-header (get-in ctx [:request :headers "accept"] "*/*")]
+    (if-let [response-content-type (conneg/best-allowed-content-type
+                                    accept-header
+                                    acceptable-media-types)]
+      (assoc-in ctx [:request :media-type] (s/join "/" response-content-type))
+      (assoc ctx :response response/not-acceptable))))
+
 (def default-media-type-fns
   {"application/edn" pr-str
    "application/json" json/generate-string
@@ -44,20 +53,14 @@
      (interceptor
       :enter
       (fn [ctx]
-        (let [content-type-header (get-in ctx [:request :headers "content-type"])
-              accept-header (get-in ctx [:request :headers "accept"] "*/*")
-              response-content-type (conneg/best-allowed-content-type
-                                     accept-header
-                                     acceptable-media-types)]
-          (when content-type-header
-            (let [request-content-type (conneg/best-allowed-content-type
-                                        content-type-header
-                                        acceptable-media-types)]
-              (when-not request-content-type
-                (assoc ctx :response response/unsupported-media-type))))
-          (if response-content-type
-            (assoc-in ctx [:request :media-type] (s/join "/" response-content-type))
-            (assoc ctx :response response/not-acceptable))))
+        (if-let [content-type-header (get-in ctx [:request :headers "content-type"])]
+          (let [request-content-type (conneg/best-allowed-content-type
+                                      content-type-header
+                                      acceptable-media-types)]
+            (if request-content-type
+              (negotiate-response-content-type ctx acceptable-media-types)
+              (assoc ctx :response response/unsupported-media-type)))
+          (negotiate-response-content-type ctx acceptable-media-types)))
       :leave
       (fn [ctx]
         (let [response-content-type (get-in ctx [:request :media-type])
