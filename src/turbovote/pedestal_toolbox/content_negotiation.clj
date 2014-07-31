@@ -54,7 +54,7 @@
                                         content-type-header
                                         acceptable-media-types)]
               (when-not request-content-type
-                (assoc-in ctx :response response/unsupported-media-type))))
+                (assoc ctx :response response/unsupported-media-type))))
           (if response-content-type
             (assoc-in ctx [:request :media-type] (s/join "/" response-content-type))
             (assoc ctx :response response/not-acceptable))))
