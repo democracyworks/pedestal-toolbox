@@ -10,3 +10,8 @@
   (-> "Not acceptable"
       ring-resp/response
       (ring-resp/status 406)))
+
+(def unsupported-media-type
+  (-> "Unsupported media type"
+      ring-resp/response
+      (ring-resp/status 415)))
