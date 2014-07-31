@@ -19,7 +19,7 @@
     (or (coercions schema)
         (coerce/json-coercion-matcher schema))))
 
-(defbefore body-params
+#_(defbefore body-params
   [ctx]
   (try
     (let [new-ctx ((:enter (body-params/body-params)) ctx)
@@ -30,6 +30,25 @@
                     (:form-params request))))
     (catch Exception e
       (assoc ctx :response (response/bad-request (.getMessage e))))))
+
+(defn body-params
+  ([] (body-params body-params/default-parser-map))
+  ([parser-map]
+     (interceptor
+      :enter (fn [ctx]
+               (if-let [content-type (get-in ctx [:request :headers "content-type"])]
+                 (if ( parser-map content-type)
+                   (try
+                     (let [new-ctx ((:enter (body-params/body-params parser-map)) ctx)
+                           request (:request new-ctx)]
+                       (assoc-in new-ctx [:request :body-params]
+                                 (or (:edn-params request)
+                                     (:json-params request)
+                                     (:form-params request))))
+                     (catch Exception e
+                       (assoc ctx :response (response/bad-request (.getMessage e)))))
+                   (assoc ctx [:response] response/unsupported-media-type))
+                 ctx)))))
 
 (defn keywordize-params
   [param-key]

@@ -20,7 +20,8 @@
              (-> good-body
                  make-request
                  ((:enter body-params))
-                 (get-in [:request :edn-params])))))
+                 (println)
+                 #_(get-in [:request :edn-params])))))
     (testing "Returns a 400 (not a 500!) on a bad request"
       (is (= 400 (-> bad-body
                      make-request
@@ -37,7 +38,12 @@
              (-> good-body
                  make-request
                  ((:enter body-params))
-                 (get-in [:request :body-params])))))))
+                 (get-in [:request :body-params])))))
+    (testing "Returns a 415 on an unacceptable content-type"
+      (is (= 415 (-> ""
+                     make-request
+                     ((:enter body-params {#"^application/edn" body-params/edn-parser}))
+                     (get-in [:response :status])))))))
 
 (deftest keywordize-params-test
   (let [params {"a" 1 "b" {"c" 2}}

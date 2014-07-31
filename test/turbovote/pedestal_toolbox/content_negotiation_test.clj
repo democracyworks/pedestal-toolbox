@@ -4,27 +4,19 @@
             [turbovote.pedestal-toolbox.response :refer :all]
             [cheshire.core :as json]))
 
-(deftest negotiate-content-type-test
-  (let [json-acceptor (negotiate-content-type ["application/json"])
+(deftest negotiate-response-content-type-test
+  (let [json-acceptor (negotiate-response-content-type ["application/json"])
         enter (:enter json-acceptor)
         leave (:leave json-acceptor)]
     (testing "enter"
       (let [json-response {:request {:headers {"accept" "application/json"}}}
             star-response {:request {:headers {"accept" "*/*"}}}
-            edn-response {:request {:headers {"accept" "application/edn"}}}
-            json-request {:request {:headers {"accept" "application/json"
-                                              "content-type" "application/json"}}}
-            edn-request {:request {:headers {"accept" "application/edn"
-                                             "content-type" "application/edn"}}}]
+            edn-response {:request {:headers {"accept" "application/edn"}}}]
         (testing "adds the media-type to the request if acceptable"
           (is (= "application/json" (get-in (enter json-response)
                                             [:request :media-type])))
           (is (= "application/json" (get-in (enter star-response)
-                                            [:request :media-type])))
-          (is (= "application/json" (get-in (enter json-request)
                                             [:request :media-type]))))
-        (testing "returns unsupported media type if no matching request type"
-          (is (= unsupported-media-type (-> edn-request enter :response))))
         (testing "returns not-acceptable if there is no matching response type"
           (is (= not-acceptable (-> edn-response enter :response))))))
     (testing "leave"
