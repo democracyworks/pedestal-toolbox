@@ -19,25 +19,30 @@
                  (get-in [:request :edn-params]))
              (-> good-body
                  make-request
-                 ((:enter body-params))
+                 ((:enter (body-params)))
                  (get-in [:request :edn-params])))))
     (testing "Returns a 400 (not a 500!) on a bad request"
       (is (= 400 (-> bad-body
                      make-request
-                     ((:enter body-params))
+                     ((:enter (body-params)))
                      (get-in [:response :status])))))
     (testing "Returns error message on a bad request"
       (is (= "Map literal must contain an even number of forms"
              (-> bad-body
                  make-request
-                 ((:enter body-params))
+                 ((:enter (body-params)))
                  (get-in [:response :body])))))
     (testing "Copies params to body-params"
       (is (= (read-string good-body)
              (-> good-body
                  make-request
-                 ((:enter body-params))
-                 (get-in [:request :body-params])))))))
+                 ((:enter (body-params)))
+                 (get-in [:request :body-params])))))
+    (testing "Returns a 415 on an unacceptable content-type"
+      (is (= 415 (-> "{}"
+                     make-request
+                     ((:enter (body-params {#"^application/json" body-params/json-parser})))
+                     (get-in [:response :status])))))))
 
 (deftest keywordize-params-test
   (let [params {"a" 1 "b" {"c" 2}}
