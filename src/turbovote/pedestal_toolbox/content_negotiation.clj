@@ -55,6 +55,3 @@
                  (-> response
                      (ring-resp/content-type response-content-type)
                      (assoc :body (media-type-fn body)))))))))
-
-;; retains backwards compatibility
-(def negotiate-content-type negotiate-response-content-type)
