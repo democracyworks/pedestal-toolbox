@@ -9,16 +9,16 @@
         enter (:enter json-acceptor)
         leave (:leave json-acceptor)]
     (testing "enter"
-      (let [json-response {:request {:headers {"accept" "application/json"}}}
-            star-response {:request {:headers {"accept" "*/*"}}}
-            edn-response {:request {:headers {"accept" "application/edn"}}}]
+      (let [accept-json-response {:request {:headers {"accept" "application/json"}}}
+            accept-any-response {:request {:headers {"accept" "*/*"}}}
+            accept-edn-response {:request {:headers {"accept" "application/edn"}}}]
         (testing "adds the media-type to the request if acceptable"
-          (is (= "application/json" (get-in (enter json-response)
+          (is (= "application/json" (get-in (enter accept-json-response)
                                             [:request :media-type])))
-          (is (= "application/json" (get-in (enter star-response)
+          (is (= "application/json" (get-in (enter accept-any-response)
                                             [:request :media-type]))))
         (testing "returns not-acceptable if there is no matching response type"
-          (is (= not-acceptable (-> edn-response enter :response))))))
+          (is (= not-acceptable (-> accept-edn-response enter :response))))))
     (testing "leave"
       (let [ctx {:request {:media-type "application/json"}
                  :response {:status 200 :headers {} :body {:foo "bar"}}}]
