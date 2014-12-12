@@ -1,4 +1,4 @@
-* 0.5.0 - XXXX-XX-XX
+* 0.5.0 - 2014-08-04
     * API change: `turbovote.pedestal-toolbox.content-negotiation/negotiate-content-type` is now `negotiate-response-content-type` to make its purpose clearer
     * `turbovote.pedestal-toolbox.params/body-params` is now an interceptorfn instead of an interceptor; you don't have to change existing route tables, though, because they know how to handle interceptorfns. 
     * The new `turbovote.pedestal-toolbox.params/body-params` interceptorfn has a single-arity version that accepts a parser-map of MIME type regexes to parser fns.
