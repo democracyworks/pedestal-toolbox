@@ -50,8 +50,10 @@
         (let [response-content-type (get-in ctx [:request :media-type])
               media-type-fn (get media-type-fns response-content-type identity)
               response (:response ctx)
-              body (:body response)]
+              body (:body response)
+              encoded-body (media-type-fn body)]
           (assoc ctx :response
                  (-> response
                      (ring-resp/content-type response-content-type)
-                     (assoc :body (media-type-fn body)))))))))
+                     (assoc :body encoded-body)
+                     (ring-resp/header "Content-Length" (.length encoded-body)))))))))
