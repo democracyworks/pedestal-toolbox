@@ -55,5 +55,4 @@
           (assoc ctx :response
                  (-> response
                      (ring-resp/content-type response-content-type)
-                     (assoc :body encoded-body)
-                     (ring-resp/header "Content-Length" (.length encoded-body)))))))))
+                     (assoc :body encoded-body))))))))

@@ -15,3 +15,12 @@
   (-> "Unsupported media type"
       ring-resp/response
       (ring-resp/status 415)))
+
+(defn string-bytes [string]
+  (alength (.getBytes string "UTF-8")))
+
+(defn string-response [string]
+  (let [byte-count (string-bytes string)]
+    (-> string
+        ring-resp/response
+        (ring-resp/header "Content-Length" byte-count))))
