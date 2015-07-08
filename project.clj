@@ -1,6 +1,6 @@
-(defproject turbovote.pedestal-toolbox "0.5.1-SNAPSHOT"
+(defproject democracyworks.pedestal-toolbox "0.5.1-SNAPSHOT"
   :description "Pedestal service helpers"
-  :url "http://www.github.com/turbovote/pedestal-toolbox"
+  :url "http://www.github.com/democracyworks/pedestal-toolbox"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.6.0"]

@@ -1,7 +1,7 @@
-(ns turbovote.pedestal-toolbox.content-negotiation
+(ns democracyworks.pedestal-toolbox.content-negotiation
   (:require [io.pedestal.impl.interceptor :refer [interceptor]]
             [liberator.conneg :as conneg]
-            [turbovote.pedestal-toolbox.response :as response]
+            [democracyworks.pedestal-toolbox.response :as response]
             [ring.util.response :as ring-resp]
             [cheshire.core :as json]
             [cheshire.generate :refer [add-encoder encode-map]]

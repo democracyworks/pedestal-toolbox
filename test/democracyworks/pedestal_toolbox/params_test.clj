@@ -1,8 +1,8 @@
-(ns turbovote.pedestal-toolbox.params-test
+(ns democracyworks.pedestal-toolbox.params-test
   (:require [clojure.test :refer :all]
             [io.pedestal.http.body-params :as body-params]
-            [turbovote.pedestal-toolbox.params :refer :all]
-            [turbovote.pedestal-toolbox.response :refer [bad-request]]))
+            [democracyworks.pedestal-toolbox.params :refer :all]
+            [democracyworks.pedestal-toolbox.response :refer [bad-request]]))
 
 (deftest body-params-test
   (let [make-request (fn [body]

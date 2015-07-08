@@ -1,8 +1,8 @@
-(ns turbovote.pedestal-toolbox.params
+(ns democracyworks.pedestal-toolbox.params
   (:require [io.pedestal.http.body-params :as body-params]
             [io.pedestal.interceptor :refer [defbefore interceptor definterceptorfn]]
             [ring.middleware.keyword-params :as keyword-params]
-            [turbovote.pedestal-toolbox.response :as response]
+            [democracyworks.pedestal-toolbox.response :as response]
             [schema.core :as s]
             [schema.coerce :as coerce]
             [clj-time.coerce :as t]))
