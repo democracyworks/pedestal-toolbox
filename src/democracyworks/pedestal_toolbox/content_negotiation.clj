@@ -1,5 +1,5 @@
 (ns democracyworks.pedestal-toolbox.content-negotiation
-  (:require [io.pedestal.impl.interceptor :refer [interceptor]]
+  (:require [io.pedestal.interceptor :refer [interceptor]]
             [liberator.conneg :as conneg]
             [democracyworks.pedestal-toolbox.response :as response]
             [ring.util.response :as ring-resp]
@@ -37,21 +37,21 @@
      (negotiate-response-content-type acceptable-media-types default-media-type-fns))
   ([acceptable-media-types media-type-fns]
      (interceptor
-      :enter
-      (fn [ctx]
-        (let [accept-header (get-in ctx [:request :headers "accept"] "*/*")]
-          (if-let [response-content-type (conneg/best-allowed-content-type
-                                          accept-header
-                                          acceptable-media-types)]
-            (assoc-in ctx [:request :media-type] (s/join "/" response-content-type))
-            (assoc ctx :response response/not-acceptable))))
-      :leave
-      (fn [ctx]
-        (let [response-content-type (get-in ctx [:request :media-type])
-              media-type-fn (get media-type-fns response-content-type identity)
-              response (:response ctx)
-              body (:body response)]
-          (assoc ctx :response
-                 (-> response
-                     (ring-resp/content-type response-content-type)
-                     (assoc :body (media-type-fn body)))))))))
+      {:enter
+       (fn [ctx]
+         (let [accept-header (get-in ctx [:request :headers "accept"] "*/*")]
+           (if-let [response-content-type (conneg/best-allowed-content-type
+                                           accept-header
+                                           acceptable-media-types)]
+             (assoc-in ctx [:request :media-type] (s/join "/" response-content-type))
+             (assoc ctx :response response/not-acceptable))))
+       :leave
+       (fn [ctx]
+         (let [response-content-type (get-in ctx [:request :media-type])
+               media-type-fn (get media-type-fns response-content-type identity)
+               response (:response ctx)
+               body (:body response)]
+           (assoc ctx :response
+                  (-> response
+                      (ring-resp/content-type response-content-type)
+                      (assoc :body (media-type-fn body))))))})))
