@@ -1,4 +1,4 @@
-(ns democracyworks.pedestal-toolbox.macros)
+(ns pedestal-toolbox.macros)
 
 (defmacro let-or-reply
   "Usage: (let-or-reply ctx [bindings*] exprs*)

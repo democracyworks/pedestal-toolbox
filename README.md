@@ -1,4 +1,4 @@
-# democracyworks.pedestal-toolbox
+# democracyworks/pedestal-toolbox
 
 Pedestal service helpers
 
