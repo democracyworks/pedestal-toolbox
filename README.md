@@ -4,7 +4,7 @@ Pedestal service helpers
 
 ## License
 
-Copyright © 2015 DemocracyWorks
+Copyright © 2015 Democracy Works Inc.
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
