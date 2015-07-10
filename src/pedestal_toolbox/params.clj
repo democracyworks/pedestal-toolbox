@@ -5,7 +5,8 @@
             [pedestal-toolbox.response :as response]
             [schema.core :as s]
             [schema.coerce :as coerce]
-            [clj-time.coerce :as t]))
+            [clj-time.coerce :as t]
+            [clojure.string :as str]))
 
 (defn coerce-or-identity [f]
   (fn [x]
@@ -19,24 +20,30 @@
     (or (coercions schema)
         (coerce/json-coercion-matcher schema))))
 
+(defn blank->nil [s]
+  (when-not (str/blank? s) s))
+
 (defn body-params
   ([] (body-params (body-params/default-parser-map)))
   ([parser-map]
    (interceptor
     {:enter (fn [ctx]
-               (if-let [content-type (get-in ctx [:request :content-type])]
-                 (if (some #(re-matches % content-type) (keys parser-map))
-                   (try
-                     (let [new-ctx ((:enter (body-params/body-params parser-map)) ctx)
-                           request (:request new-ctx)]
-                       (assoc-in new-ctx [:request :body-params]
-                                 (or (:edn-params request)
-                                     (:json-params request)
-                                     (:form-params request))))
-                     (catch Exception e
-                       (assoc ctx :response (response/bad-request (.getMessage e)))))
-                   (assoc ctx :response response/unsupported-media-type))
-                 ctx))})))
+              (if-let [content-type (-> ctx
+                                        (get-in [:request :content-type])
+                                        blank->nil)]
+                (if (some #(re-matches % content-type) (keys parser-map))
+                  (try
+                    (let [new-ctx ((:enter (body-params/body-params parser-map)) ctx)
+                          request (:request new-ctx)]
+                      (assoc-in new-ctx [:request :body-params]
+                                (or (:edn-params request)
+                                    (:json-params request)
+                                    (:form-params request)
+                                    (:transit-params request))))
+                    (catch Exception e
+                      (assoc ctx :response (response/bad-request (.getMessage e)))))
+                  (assoc ctx :response response/unsupported-media-type))
+                ctx))})))
 
 (defn keywordize-params
   [param-key]
