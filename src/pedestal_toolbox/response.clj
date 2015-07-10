@@ -1,4 +1,4 @@
-(ns turbovote.pedestal-toolbox.response
+(ns pedestal-toolbox.response
   (:require [ring.util.response :as ring-resp]))
 
 (defn bad-request [error]

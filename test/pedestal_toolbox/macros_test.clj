@@ -1,6 +1,6 @@
-(ns turbovote.pedestal-toolbox.macros-test
+(ns pedestal-toolbox.macros-test
   (:require [clojure.test :refer :all]
-            [turbovote.pedestal-toolbox.macros :refer :all]))
+            [pedestal-toolbox.macros :refer :all]))
 
 (deftest let-or-reply-test
   (let [context {:request {:foo 1 :bar "hi"}}]

@@ -1,7 +1,7 @@
-(ns turbovote.pedestal-toolbox.content-negotiation-test
+(ns pedestal-toolbox.content-negotiation-test
   (:require [clojure.test :refer :all]
-            [turbovote.pedestal-toolbox.content-negotiation :refer :all]
-            [turbovote.pedestal-toolbox.response :refer :all]
+            [pedestal-toolbox.content-negotiation :refer :all]
+            [pedestal-toolbox.response :refer :all]
             [cheshire.core :as json]))
 
 (deftest negotiate-response-content-type-test
