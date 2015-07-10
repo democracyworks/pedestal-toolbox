@@ -1,4 +1,4 @@
-* HEAD
+* 0.6.0 - 2015-07-10
     * Upgraded to Pedestal 0.4.0, including some [breaking changes](https://github.com/pedestal/pedestal/releases).
         * Consumers of `pedestal-toolbox.param/body-params` can't pass it into their routes, you must call the fn.
     * Changed the project name from `turbovote.pedestal-toolbox` to `democracyworks/pedestal-toolbox`.
