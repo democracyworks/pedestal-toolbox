@@ -68,6 +68,21 @@
             (assoc ctx :response (response/bad-request e)))))})
     {:schema schema}))
 
+(def query-param-content-type
+  "An enter interceptor that fakes an Accept header so that later
+  interceptors can handle the Accept header normally. This is used
+  because it's literally impossible to make a clickable link in a
+  browser that sets the Accept header in the normal way.
+
+  To use, add an content-type=application/csv to the URL query string.
+  Expects the query params to have already been kewordized by kewordize-params"
+  (interceptor
+   {:enter
+    (fn [ctx]
+      (if-let [content-type (get-in ctx [:request :params :content-type])]
+        (assoc-in ctx [:request :headers "accept"] content-type)
+        ctx))}))
+
 (def validate-body-params
   "Given a schema, attempt to validate the body-params against
   it. Renders a 400 if the body-params does not match"
