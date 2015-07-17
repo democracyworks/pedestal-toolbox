@@ -69,13 +69,14 @@
     {:schema schema}))
 
 (def query-param-content-type
-  "An enter interceptor that fakes an Accept header so that later
+  "A before interceptor that fakes an Accept header so that later
   interceptors can handle the Accept header normally. This is used
   because it's literally impossible to make a clickable link in a
   browser that sets the Accept header in the normal way.
 
-  To use, add an content-type=application/csv to the URL query string.
-  Expects the query params to have already been kewordized by kewordize-params"
+  To use, add a accept=application/csv to the URL query string.
+  Expects the query params to have already been keywordized by
+  keywordize-params"
   (interceptor
    {:enter
     (fn [ctx]
