@@ -79,7 +79,7 @@
   (interceptor
    {:enter
     (fn [ctx]
-      (if-let [content-type (get-in ctx [:request :params :content-type])]
+      (if-let [content-type (get-in ctx [:request :params :accept])]
         (assoc-in ctx [:request :headers "accept"] content-type)
         ctx))}))
 
