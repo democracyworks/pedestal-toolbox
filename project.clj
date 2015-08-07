@@ -1,4 +1,4 @@
-(defproject democracyworks/pedestal-toolbox "0.6.1-SNAPSHOT"
+(defproject democracyworks/pedestal-toolbox "0.6.1"
   :description "Pedestal service helpers"
   :url "http://www.github.com/democracyworks/pedestal-toolbox"
   :license {:name "Eclipse Public License"
