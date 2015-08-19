@@ -31,7 +31,7 @@
               (if-let [content-type (-> ctx
                                         (get-in [:request :content-type])
                                         blank->nil)]
-                (if (some #(re-matches % content-type) (keys parser-map))
+                (if (some #(re-find % content-type) (keys parser-map))
                   (try
                     (let [new-ctx ((:enter (body-params/body-params parser-map)) ctx)
                           request (:request new-ctx)]
