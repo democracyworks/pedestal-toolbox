@@ -68,7 +68,7 @@
             (assoc ctx :response (response/bad-request e)))))})
     {:schema schema}))
 
-(def query-param-content-type
+(def query-param-accept
   "A before interceptor that fakes an Accept header so that later
   interceptors can handle the Accept header normally. This is used
   because it's literally impossible to make a clickable link in a

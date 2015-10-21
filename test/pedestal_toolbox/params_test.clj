@@ -96,10 +96,10 @@
                             enter
                             (get-in [:response :body])))))))))
 
-(deftest query-param-content-type-test
+(deftest query-param-accept-test
   (let [params {"a" 1 :accept "application/csv"}
         ctx {:request {:params params}}
-        enter (:enter query-param-content-type)
+        enter (:enter query-param-accept)
         ctx-with-updated-headers (enter ctx)]
     (testing "a query param of content type is placed in the headers"
       (is (= (get-in ctx [:request :params :accept])
