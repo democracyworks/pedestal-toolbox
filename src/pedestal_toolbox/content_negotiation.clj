@@ -6,7 +6,9 @@
             [cheshire.core :as json]
             [cheshire.generate :refer [add-encoder encode-map]]
             [clojure.string :as s]
-            [schema.utils :as schema]))
+            [schema.utils :as schema]
+            [cognitect.transit :as transit])
+  (:import [java.io ByteArrayOutputStream]))
 
 (add-encoder schema.utils.ValidationError
              (fn [error json-generator]
@@ -17,10 +19,32 @@
                    :value   (second (second error-explanation))}
                   json-generator))))
 
+(defn ->transit
+  [data type]
+  (let [out (ByteArrayOutputStream.)]
+    (-> out
+        (transit/writer type)
+        (transit/write data))
+    out))
+
+(defn ->transit-json-string
+  [data]
+  (-> data
+      (->transit :json)
+      (.toString "UTF-8")))
+
+(defn ->transit-msgpack-bytes
+  [data]
+  (-> data
+      (->transit :msgpack)
+      .toByteArray))
+
 (def default-media-type-fns
   {"application/edn" pr-str
    "application/json" json/generate-string
-   "text/plain" identity})
+   "text/plain" identity
+   "application/transit+json" ->transit-json-string
+   "application/transit+msgpack" ->transit-msgpack-bytes})
 
 (defn negotiate-response-content-type
   "Creates an interceptor with an enter fn that negotiates content

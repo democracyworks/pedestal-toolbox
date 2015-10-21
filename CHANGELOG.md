@@ -1,3 +1,12 @@
+* 0.6.1 - 2015-08-07
+    * Updated dependencies
+        * Clojure 1.6.0 -> 1.7.0
+        * liberator 0.11.0 -> 0.13
+        * ring 1.3.0 -> 1.4.0
+        * cheshire 5.3.1 -> 5.5.0
+        * prismatic/schema 0.2.1 -> 0.4.3
+        * clj-time 0.7.0 -> 0.10.0
+    * Added support for [Transit](https://github.com/cognitect/transit-format) responses
 * 0.6.0 - 2015-07-10
     * Upgraded to Pedestal 0.4.0, including some [breaking changes](https://github.com/pedestal/pedestal/releases).
         * Consumers of `pedestal-toolbox.param/body-params` can't pass it into their routes, you must call the fn.
