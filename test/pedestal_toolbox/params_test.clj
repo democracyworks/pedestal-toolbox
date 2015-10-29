@@ -21,6 +21,13 @@
                  make-request
                  ((:enter (body-params)))
                  (get-in [:request :edn-params])))))
+    (testing "Doesn't 415 if charset is set"
+      (is (not= 415
+                (-> good-body
+                    make-request
+                    (assoc-in [:request :content-type] "application/edn; charset=UTF-8")
+                    ((:enter (body-params)))
+                    (get-in [:response :status])))))
     (testing "Returns a 400 (not a 500!) on a bad request"
       (is (= 400 (-> bad-body
                      make-request

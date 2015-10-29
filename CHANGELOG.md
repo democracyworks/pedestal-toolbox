@@ -1,3 +1,8 @@
+* 0.6.3 - 2015-10-29
+    * Added a `query-param-accept` to help with browser issues
+* 0.6.2 - 2015-08-19
+    * Fixed a bug how `body-params` interceptor looked for matching
+      parsers in the `parser-map`.
 * 0.6.1 - 2015-08-07
     * Updated dependencies
         * Clojure 1.6.0 -> 1.7.0
