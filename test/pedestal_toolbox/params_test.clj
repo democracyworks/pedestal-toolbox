@@ -109,7 +109,7 @@
         enter (:enter query-param-accept)
         ctx-with-updated-headers (enter ctx)]
     (testing "a query param of content type is placed in the headers"
-      (is (= (get-in ctx [:request :params :accept])
+      (is (= "application/csv"
              (get-in ctx-with-updated-headers [:request :headers "accept"]))))
     (testing "the original params aren't mutated"
       (is (= (get-in ctx [:request :params "a"]) 1)))))
