@@ -68,6 +68,22 @@
             (assoc ctx :response (response/bad-request e)))))})
     {:schema schema}))
 
+(def query-param-accept
+  "A before interceptor that fakes an Accept header so that later
+  interceptors can handle the Accept header normally. This is used
+  because it's literally impossible to make a clickable link in a
+  browser that sets the Accept header in the normal way.
+
+  To use, add a accept=application/csv to the URL query string.
+  Expects the query params to have already been keywordized by
+  keywordize-params"
+  (interceptor
+   {:enter
+    (fn [ctx]
+      (if-let [accept (get-in ctx [:request :params :accept])]
+        (assoc-in ctx [:request :headers "accept"] accept)
+        ctx))}))
+
 (def validate-body-params
   "Given a schema, attempt to validate the body-params against
   it. Renders a 400 if the body-params does not match"

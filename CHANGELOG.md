@@ -1,3 +1,5 @@
+* HEAD
+    * Added a `query-param-accept` to help with browser issues
 * 0.6.2 - 2015-08-19
     * Fixed a bug how `body-params` interceptor looked for matching
       parsers in the `parser-map`.
