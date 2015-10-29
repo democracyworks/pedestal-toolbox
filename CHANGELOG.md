@@ -1,4 +1,4 @@
-* 0.6.3 - 2015-10-29
+* 0.6.3
     * Added a `query-param-accept` to help with browser issues
 * 0.6.2 - 2015-08-19
     * Fixed a bug how `body-params` interceptor looked for matching
