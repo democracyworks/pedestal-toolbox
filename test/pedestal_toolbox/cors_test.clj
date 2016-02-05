@@ -29,4 +29,7 @@
       (is (false? (f "https://google.com")))
       (is (true? (f "https://turbovote.org")))
       (is (false? (f "http://turbovote.org")))
-      (is (true? (f "http://vote.donaldtrump.com"))))))
+      (is (true? (f "http://vote.donaldtrump.com")))))
+  (testing "matcher handles nil gracefully (with false return)"
+    (let [f (domain-matcher-fn [#".+"])]
+      (is (false? (f nil))))))

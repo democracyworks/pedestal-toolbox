@@ -3,4 +3,5 @@
 (defn domain-matcher-fn [patterns]
   (fn [origin]
     (boolean
-     (some #(re-matches % origin) patterns))))
+     (and origin
+          (some #(re-matches % origin) patterns)))))
