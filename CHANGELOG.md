@@ -1,4 +1,14 @@
 * HEAD
+  * Updated dependencies ->
+    * Clojure 1.9.0
+    * pedestal-service 0.5.5
+    * liberator 0.15.2
+    * ring-core 1.7.1
+    * cheshire 4.8.1
+    * schema 1.1.10
+    * clj-time 0.15.1
+    * transit 0.8.313
+* 0.7.1?
     * Added a `query-param-accept` to help with browser issues
 * 0.6.2 - 2015-08-19
     * Fixed a bug how `body-params` interceptor looked for matching
