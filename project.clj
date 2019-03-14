@@ -6,9 +6,9 @@
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [io.pedestal/pedestal.service "0.4.1"]
                  [liberator "0.15.2"]
-                 [ring/ring-core "1.4.0"]
                  [cheshire "5.5.0"]
                  [prismatic/schema "1.0.4"]
                  [clj-time "0.11.0"]
                  [com.cognitect/transit-clj "0.8.285"]]
+                 [ring/ring-core "1.7.1"]
   :deploy-repositories [["releases" :clojars]])

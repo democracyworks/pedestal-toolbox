@@ -45,12 +45,15 @@
                   (assoc ctx :response response/unsupported-media-type))
                 ctx))})))
 
+(defn- keyify-params [target]
+  (#'keyword-params/keyify-params target false))
+
 (defn keywordize-params
   [param-key]
   (interceptor
    {:enter
     (fn [ctx]
-      (update-in ctx [:request param-key] #'keyword-params/keyify-params))}))
+      (update-in ctx [:request param-key] keyify-params))}))
 
 (defn validate-params
   [param-key schema]
