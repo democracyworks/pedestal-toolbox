@@ -1,14 +1,15 @@
-* HEAD
-  * Updated dependencies ->
-    * Clojure 1.9.0
-    * pedestal-service 0.5.5
-    * liberator 0.15.2
-    * ring-core 1.7.1
-    * cheshire 4.8.1
-    * schema 1.1.10
-    * clj-time 0.15.1
-    * transit 0.8.313
-* 0.7.1?
+* 0.7.1-SNAPSHOT - Unreleased
+    * Now compatible with Java 11
+    * Updated dependencies
+        * Clojure 1.10.1
+        * pedestal-service 0.5.7
+        * liberator 0.15.3
+        * ring-core 1.7.1
+        * cheshire 5.8.1
+        * schema 1.1.11
+        * clj-time 0.15.1
+        * transit 0.8.313
+* 0.7.0 - 2016-02-05
     * Added a `query-param-accept` to help with browser issues
 * 0.6.2 - 2015-08-19
     * Fixed a bug how `body-params` interceptor looked for matching
@@ -33,7 +34,6 @@
         * Ex: `{ #"^application/json" io.pedestal.http.body-params/json-parser }`
         * By default (i.e. the zero-arity version) this function accepts any request bodies that `io.pedestal.http.body-params` can parse.
         * It responds with a 415 Unsupported Media Type if the Content-Type isn't matched by one of the parser-map's keys.
-
 * 0.3.3 - 2014-04-24
     * now allows returning data structures on errors rather than turning them into strings
     * added a JSON encoder for schema.utils.ValidationErrors
