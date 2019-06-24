@@ -1,4 +1,5 @@
-* 0.7.1-SNAPSHOT - Unreleased
+* 0.7.2-SNAPSHOT - Unreleased
+* 0.7.1 - 2019-06-24
     * Now compatible with Java 11
     * Updated dependencies
         * Clojure 1.10.1
